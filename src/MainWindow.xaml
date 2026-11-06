@@ -1,0 +1,163 @@
+<Window x:Class="BorgionPasswordChange.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Borgion Password Change"
+        Icon="Assets/app.ico"
+        Width="540" SizeToContent="Height" ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource BgBrush}" FontFamily="Segoe UI"
+        Foreground="{StaticResource TextBrush}"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Display">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- ============ Bovenbalk ============ -->
+        <Border Background="{StaticResource PrimaryBrush}" Padding="26,18,26,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="BORGION" FontSize="13" FontWeight="Bold" Foreground="{StaticResource AccentBrush}"/>
+                    <TextBlock Text="Password Change" FontSize="24" FontWeight="SemiBold" Foreground="White" Margin="0,-2,0,0"/>
+                    <TextBlock x:Name="UserText" FontSize="13" Foreground="White" Opacity="0.8" Margin="0,6,0,0"
+                               TextTrimming="CharacterEllipsis" Text="Account ophalen…"/>
+                </StackPanel>
+                <Border Grid.Column="1" Width="54" Height="54" CornerRadius="27" Background="{StaticResource PrimaryLightBrush}"
+                        VerticalAlignment="Center">
+                    <ContentPresenter ContentTemplate="{StaticResource LockIcon}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+            </Grid>
+        </Border>
+        <Border Height="4" Background="{StaticResource AccentBrush}" VerticalAlignment="Bottom"/>
+
+        <!-- ============ Kaart ============ -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Focusable="False">
+        <Border Background="White" CornerRadius="14" Margin="20,20,20,12" Padding="28,24"
+                BorderBrush="{StaticResource LineBrush}" BorderThickness="1">
+            <Grid>
+
+                <!-- Formulier -->
+                <StackPanel x:Name="FormPanel">
+                    <TextBlock Text="Wachtwoord wijzigen" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock FontSize="13" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,4,0,0"
+                               Text="Kies een nieuw wachtwoord voor je Windows-account. Je gebruikt het daarna voor aanmelden, e-mail, VPN en wifi."/>
+
+                    <Border x:Name="InfoBanner" Background="{StaticResource AccentSoftBrush}" CornerRadius="8" Padding="12,9" Margin="0,14,0,0">
+                        <TextBlock x:Name="InfoText" FontSize="13" TextWrapping="Wrap" Text="Accountgegevens ophalen…"/>
+                    </Border>
+
+                    <TextBlock Text="Huidig wachtwoord" Style="{StaticResource FieldLabel}"/>
+                    <Grid>
+                        <PasswordBox x:Name="PwCurrent" Style="{StaticResource PwBox}" PasswordChanged="Pw_Changed"/>
+                        <TextBox x:Name="TxtCurrent" Style="{StaticResource PwText}" TextChanged="Txt_Changed"/>
+                    </Grid>
+
+                    <TextBlock Text="Nieuw wachtwoord" Style="{StaticResource FieldLabel}"/>
+                    <Grid>
+                        <PasswordBox x:Name="PwNew" Style="{StaticResource PwBox}" PasswordChanged="Pw_Changed"/>
+                        <TextBox x:Name="TxtNew" Style="{StaticResource PwText}" TextChanged="Txt_Changed"/>
+                    </Grid>
+                    <Grid Margin="0,8,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
+                            <ColumnDefinition Width="90"/>
+                        </Grid.ColumnDefinitions>
+                        <Border x:Name="Bar1" Grid.Column="0" Height="5" CornerRadius="3" Margin="0,0,4,0" Background="{StaticResource LineBrush}"/>
+                        <Border x:Name="Bar2" Grid.Column="1" Height="5" CornerRadius="3" Margin="0,0,4,0" Background="{StaticResource LineBrush}"/>
+                        <Border x:Name="Bar3" Grid.Column="2" Height="5" CornerRadius="3" Margin="0,0,4,0" Background="{StaticResource LineBrush}"/>
+                        <Border x:Name="Bar4" Grid.Column="3" Height="5" CornerRadius="3" Background="{StaticResource LineBrush}"/>
+                        <TextBlock x:Name="StrengthText" Grid.Column="4" FontSize="12" Foreground="{StaticResource MutedBrush}"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <TextBlock Text="Herhaal nieuw wachtwoord" Style="{StaticResource FieldLabel}"/>
+                    <Grid>
+                        <PasswordBox x:Name="PwConfirm" Style="{StaticResource PwBox}" PasswordChanged="Pw_Changed"/>
+                        <TextBox x:Name="TxtConfirm" Style="{StaticResource PwText}" TextChanged="Txt_Changed"/>
+                    </Grid>
+
+                    <Grid Margin="0,8,0,0">
+                        <TextBlock x:Name="CapsText" Text="⚠ Caps Lock staat aan" FontSize="12" Foreground="{StaticResource DangerBrush}"
+                                   VerticalAlignment="Center" Visibility="Collapsed"/>
+                        <ToggleButton x:Name="ShowToggle" Style="{StaticResource LinkToggle}" HorizontalAlignment="Right"
+                                      Checked="ShowToggle_Changed" Unchecked="ShowToggle_Changed" Content="Wachtwoorden tonen"/>
+                    </Grid>
+
+                    <!-- Eisen -->
+                    <Border Background="{StaticResource BgBrush}" CornerRadius="8" Padding="14,10,14,12" Margin="0,12,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Je nieuwe wachtwoord:" FontSize="13" FontWeight="SemiBold" Margin="0,0,0,2"/>
+                            <TextBlock x:Name="RuleLength" Style="{StaticResource RuleText}"/>
+                            <TextBlock x:Name="RuleComplex" Style="{StaticResource RuleText}"/>
+                            <TextBlock x:Name="RuleName" Style="{StaticResource RuleText}"/>
+                            <TextBlock x:Name="RuleDifferent" Style="{StaticResource RuleText}"/>
+                            <TextBlock x:Name="RuleMatch" Style="{StaticResource RuleText}"/>
+                            <TextBlock x:Name="RuleHistory" Style="{StaticResource RuleText}" Visibility="Collapsed"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Foutmelding -->
+                    <Border x:Name="ErrorBanner" Background="{StaticResource DangerSoftBrush}" CornerRadius="8" Padding="12,10"
+                            Margin="0,14,0,0" BorderBrush="{StaticResource DangerBrush}" BorderThickness="4,0,0,0" Visibility="Collapsed">
+                        <TextBlock x:Name="ErrorText" FontSize="13" Foreground="{StaticResource DangerBrush}" TextWrapping="Wrap"/>
+                    </Border>
+
+                    <!-- Bezig -->
+                    <StackPanel x:Name="BusyPanel" Margin="0,16,0,0" Visibility="Collapsed">
+                        <ProgressBar IsIndeterminate="True" Height="4" Foreground="{StaticResource AccentBrush}"
+                                     Background="{StaticResource BgBrush}" BorderThickness="0"/>
+                        <TextBlock Text="Bezig met wijzigen bij de domeincontroller…" FontSize="13"
+                                   Foreground="{StaticResource MutedBrush}" Margin="0,6,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                        <Button x:Name="BtnCancel" Style="{StaticResource SecondaryButton}" Content="Annuleren"
+                                IsCancel="True" Click="Cancel_Click" Margin="0,0,10,0"/>
+                        <Button x:Name="BtnChange" Style="{StaticResource AccentButton}" Content="Wachtwoord wijzigen"
+                                IsDefault="True" IsEnabled="False" Click="Change_Click"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Gelukt -->
+                <StackPanel x:Name="DonePanel" Visibility="Collapsed">
+                    <Border Width="76" Height="76" CornerRadius="38" Background="{StaticResource SuccessSoftBrush}"
+                            HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <TextBlock Text="✓" FontSize="40" FontWeight="Bold" Foreground="{StaticResource SuccessBrush}"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,-4,0,0"/>
+                    </Border>
+                    <TextBlock Text="Je wachtwoord is gewijzigd" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,16,0,0"/>
+                    <TextBlock FontSize="14" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" TextAlignment="Center" Margin="0,8,0,0"
+                               Text="Gebruik vanaf nu je nieuwe wachtwoord."/>
+
+                    <Border Background="{StaticResource AccentSoftBrush}" CornerRadius="8" Padding="14,12" Margin="0,18,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Wat nu?" FontSize="13" FontWeight="SemiBold"/>
+                            <TextBlock Style="{StaticResource RuleText}" Foreground="{StaticResource TextBrush}"
+                                       Text="1.  Vergrendel je computer (Windows-toets + L) en ontgrendel met je nieuwe wachtwoord. Zo gebruiken netwerkschijven, Outlook en Teams direct het nieuwe wachtwoord."/>
+                            <TextBlock Style="{StaticResource RuleText}" Foreground="{StaticResource TextBrush}"
+                                       Text="2.  Werk het wachtwoord ook bij op je telefoon of tablet (e-mail, wifi), anders kan je account geblokkeerd raken."/>
+                        </StackPanel>
+                    </Border>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,22,0,4">
+                        <Button Style="{StaticResource SecondaryButton}" Content="Sluiten" Click="Cancel_Click" Margin="0,0,10,0"/>
+                        <Button x:Name="BtnLock" Style="{StaticResource AccentButton}" Content="Nu vergrendelen" Click="Lock_Click"/>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+        </ScrollViewer>
+
+        <!-- ============ Voettekst ============ -->
+        <Grid Grid.Row="2" Margin="24,0,24,16">
+            <TextBlock x:Name="HelpdeskText" FontSize="12" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,0,60,0"/>
+            <TextBlock x:Name="VersionText" FontSize="12" Foreground="{StaticResource MutedBrush}" HorizontalAlignment="Right"/>
+        </Grid>
+    </Grid>
+</Window>
